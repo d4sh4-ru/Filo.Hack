@@ -1,0 +1,16 @@
+env: dev # dev, local, prod
+postgres:
+  host: database
+  port: 5432
+  database: filohack
+  username: filohack
+  password: filohack
+  schema: core
+  ssl: false
+http_server:
+  host: localhost
+  port: ":8000"
+  read_timeout: 5s
+  write_timeout: 5s
+  idle_timeout: 60s
+  jwt_secret: randomstringwithoutwords

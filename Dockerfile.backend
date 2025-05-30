@@ -1,0 +1,15 @@
+FROM golang:1.24 AS builder
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN go build -o app ./cmd/core/main.go
+
+# ---- второй этап: минимальный образ ----
+FROM debian:bookworm-slim
+
+WORKDIR /app
+COPY --from=builder /app/app .
+
+ENTRYPOINT ["./app"]

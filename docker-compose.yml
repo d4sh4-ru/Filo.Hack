@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./medical-schedule-core
+      dockerfile: Dockerfile
+    container_name: medtrack-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./medical-schedule-core/config:/app/config
+    environment:
+      - CONFIG_PATH=config/dev.yaml
+    depends_on:
+      - database
+    restart: unless-stopped
+
+  database:
+    build:
+      context: ./medical-schedule-database
+      dockerfile: Dockerfile
+    container_name: medtrack-db
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: filohack
+      POSTGRES_PASSWORD: filohack
+      POSTGRES_DB: filohack

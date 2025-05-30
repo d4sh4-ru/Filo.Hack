@@ -1,0 +1,7 @@
+FROM postgres:latest
+
+COPY ./migrations/01_init.sql /docker-entrypoint-initdb.d/
+
+# Значения для тестов
+ENV POSTGRES_USER=filohack
+ENV POSTGRES_DB=filohack

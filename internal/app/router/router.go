@@ -44,5 +44,9 @@ func RegisterPrivateRouters(e *echo.Echo, dbClient *storage.DBClient, cfg *confi
 
 	// События
 	events := api.Group("/events")
-	_ = events // Чтобы не ругался на то что переменная не используется
+	eventRepo := repository.NewEventRepository(dbClient.Db)
+	eventService := service.NewEventService(eventRepo)
+	eventEndpoint := endpoint.NewEventEndpoint(eventService)
+	_ = eventEndpoint // Чтобы не ругался на то что переменная не используется
+	_ = events        // Чтобы не ругался на то что переменная не используется
 }

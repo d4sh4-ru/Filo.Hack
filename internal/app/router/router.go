@@ -40,13 +40,18 @@ func RegisterPrivateRouters(e *echo.Echo, dbClient *storage.DBClient, cfg *confi
 
 	// Пользователи
 	users := api.Group("/users")
-	_ = users // Чтобы не ругался на то что переменная не используется
+	userRepo := repository.NewResidentRepository(dbClient.Db)
+	residentService := service.NewResidentService(userRepo)
+	userEndpoint := endpoint.NewResidentEndpoint(residentService)
+
+	users.GET("/me", userEndpoint.GetMe)
+	users.POST("/interests", userEndpoint.SetInterestsByUser)
 
 	// События
 	events := api.Group("/events")
 	eventRepo := repository.NewEventRepository(dbClient.Db)
-	eventService := service.NewEventService(eventRepo)
+	eventService := service.NewEventService(eventRepo, userRepo)
 	eventEndpoint := endpoint.NewEventEndpoint(eventService)
-	_ = eventEndpoint // Чтобы не ругался на то что переменная не используется
-	_ = events        // Чтобы не ругался на то что переменная не используется
+
+	events.POST("", eventEndpoint.CreateEvent)
 }
